@@ -1,49 +1,56 @@
-def read_template(filepath: str) -> str:
-    """ Reads a template from the filepath and returns the stripped content as a string """
-    # open the file, using the open() function and passing the filepath as the parameter, and the 'r' parameter, which indicates that we're reading the file
-    with open(filepath, 'r') as file:
-        # read the file content and assign it to a variable, using the readlines() method
-        file_content = file.read()
-    return file_content.strip()
+def madlib(inp=None,inp2=None):
+    """
+    madlib():
+        the main function to create the madlib story..
+        inputs:
+            the inputs can bee by user or made before
+            inp = it can be only 'path for templte file' OR list contain the inputs..
+            inp2 = only in case you insertd 'inp' as path you can insert 'inp2' as 'y', it will consider the inputs are list contain empty strings..
+    GL & HF :)
+    """
+    a = '/home/emad/madlib-cli/madlib_cli/madlib_template.txt'
+    b = False
 
-def parse_template():
-    pass
+    if inp:
+        if inp.count('/') > 1:
+            a = inp
+        elif type(inp) == list:
+            b = True
+    
+    a = a.split('.')
+    
+    with open(f'{a[0]}.txt','r') as f:
+        lines = f.read()
+        places = [[] for k in range(lines.count('{'))]
+        j = 0
+        for i in range(len(lines)):
+            if lines[i] == '{' or lines[i] == '}':
+                places[j].append(i)
+                if len(places[j]) == 2:
+                    j += 1
+        if b:
+            userInp = inp
+        else:
+            if inp2 == 'y':
+                userInp = ['' for i in range(22)]
+            else:
+                userInp = [input(f'Please insert {lines[places[i][0]+1:places[i][1]]}: ') for i in range(len(places))]
+        result = ''
+        for x in range(len(places)):
+            if x == 0:
+                result += lines[:places[x][0]] + userInp[x] + lines[places[x][1]+1:places[x+1][0]]
+            elif x == len(places)-1:
+                result += userInp[x] + lines[places[x][1]+1:]
+            else:
+                result += userInp[x] + lines[places[x][1]+1:places[x+1][0]]  
+    with open(a[0]+'_result.text','w+') as res:
+        res.write(result)
+    return result
+    
 
-def merge(): 
-    pass
-
-def write_new_file(filepath: str, content: str):
-    """ Writes a new file to the filepath with the content """
-    # open the file, using the open() function and passing the filepath as the parameter, and the 'w' parameter, which indicates that we're writing to the file
-    with open(filepath, 'w') as potato:
-        # write the content to the file, using the write() method
-        potato.write(content)
-
-# binary, base 2 - number system with two digits 0, 1 => 10
-# decimal, base 10 - number system with ten digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 => 10
-# hexadecimal, base 16 - number system with sixteen digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f => 10 
-
-# All files are techincally represented in binary, but we can open them in text mode, which makes it easier to read and write to the file
-# Opening a file in text mode, it looks for specific characters (\n, \t, \r) and interprets them as newlines, tabs, and carriage returns
-
-def copy_image(src_path: str, dest_path:str):
-    """ Copies an image file from one path to the other"""
-    # open src file in binary mode
-    with open(src_path, 'rb') as src_file:
-        # read the file content and assign it to a variable, using the read() method
-        src_content = src_file.read()
-        # write contents to dest_path
-        with open(dest_path, 'wb') as dest_file:
-            dest_file.write(src_content)
-
-def append_to_file(filepath: str, content: str):
-    """ Writes a new file to the filepath with the content """
-    # open the file, using the open() function and passing the filepath as the parameter, and the 'w' parameter, which indicates that we're writing to the file
-    with open(filepath, 'a') as potato:
-        # write the content to the file, using the write() method
-        potato.write(content)
-
-def reverse_arr(arr):
-    if type(arr) != list:
-        raise TypeError('input must be a list')
-    return arr[::-1]
+if __name__ == '__main__':
+    print("\n                Welcome to 'Madlib' Game :)\n\n- Rules:\n Simply we will ask you to insert knids of words..\n & finally we will present a cool story about your input..\n\n\n Type 'y' if you Are you Ready?")
+    if input('>  ') == "y":
+        print(madlib())
+    else:
+        print('Sory to see you leaveing.. :(')
