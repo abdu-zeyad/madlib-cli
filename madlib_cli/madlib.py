@@ -1,3 +1,12 @@
+filepath = 'assets/dark_and_stormy_night_template.txt'
+
+
+def read_template(filepath: str) -> str:
+    with open(filepath, 'r') as file:
+        file_content = file.read()
+    return file_content.strip()
+
+
 def madlib(inp=None, inp2=None):
 
     a = '/home/abdelmajed/ptyhon/madlib-cli/madlib_cli/madlib_template.txt'
@@ -49,3 +58,16 @@ if __name__ == '__main__':
         print(madlib())
     else:
         print('Sory to see you leaveing.. :(')
+
+
+def parse_template():
+    pass
+
+
+def merge():
+    pass
+
+
+def write_new_file(filepath: str, content: str):
+    with open(filepath, 'w') as potato:
+        potato.write(content)
