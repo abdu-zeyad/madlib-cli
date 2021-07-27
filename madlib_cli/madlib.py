@@ -11,17 +11,17 @@ def read_template(filepath: str):
 def parse_template(text: str):
     # text = re.sub(find, replace, text)
 
-    parts = []
-    strippedText = strippedText = re.sub(r'\{.*?\}', '{}', text)
+    items = []
+    text_stripped = text_stripped = re.sub(r'\{.*?\}', '{}', text)
     res = re.findall(r'\{.*?\}', text)
     for i in res:
-        parts.append(i.strip("{ }"))
-    parts = tuple(parts)
-    return strippedText, parts
+        items.append(i.strip("{ }"))
+    items = tuple(items)
+    return text_stripped, items
 
 
-def merge(text: str, parts: tuple):
-    mergedText = text.format(*parts)
+def merge(text: str, items: tuple):
+    mergedText = text.format(*items)
     return mergedText
 
 
@@ -32,17 +32,17 @@ def write_new_file(content: str):
 
 if __name__ == "__main__":
     print("Welcome to Madlib Game")
-    print("Please enter some words to play the game!")
+    print("lets start the game with adding some words:")
     wordLst = []
     text = read_template("assets/dark_and_stormy_night_template.txt")
-    strippedText, parts = parse_template(text)
+    text_stripped, items = parse_template(text)
     print(text)
-    print(strippedText)
-    print(parts)
-    for i in range(0, len(parts)):
-        inp = input('add a word ')
+    print(text_stripped)
+    print(items)
+    for i in range(0, len(items)):
+        inp = input('type a word  ')
         wordLst.append(inp)
     wordLst = tuple(wordLst)
-    mergedText = merge(strippedText, wordLst)
+    mergedText = merge(text_stripped, wordLst)
     print(mergedText)
     write_new_file(mergedText)
