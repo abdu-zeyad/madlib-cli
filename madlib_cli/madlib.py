@@ -1,73 +1,48 @@
-filepath = 'assets/dark_and_stormy_night_template.txt'
+import re
 
 
-def read_template(filepath: str) -> str:
+def read_template(filepath: str):
     with open(filepath, 'r') as file:
         file_content = file.read()
+        file.close()
     return file_content.strip()
 
 
-def madlib(inp=None, inp2=None):
+def parse_template(text: str):
+    # text = re.sub(find, replace, text)
 
-    a = '/home/abdelmajed/ptyhon/madlib-cli/madlib_cli/madlib_template.txt'
-
-    b = False
-
-    if inp:
-        if inp.count('/') > 1:
-            a = inp
-        elif type(inp) == list:
-            b = True
-
-    a = a.split('.')
-
-    with open(f'{a[0]}.txt', 'r') as f:
-        lines = f.read()
-        places = [[] for k in range(lines.count('{'))]
-        j = 0
-        for i in range(len(lines)):
-            if lines[i] == '{' or lines[i] == '}':
-                places[j].append(i)
-                if len(places[j]) == 2:
-                    j += 1
-        if b:
-            userInp = inp
-        else:
-            if inp2 == 'y':
-                userInp = ['' for i in range(22)]
-            else:
-                userInp = [input(
-                    f'Please insert {lines[places[i][0]+1:places[i][1]]}: ') for i in range(len(places))]
-        result = ''
-        for x in range(len(places)):
-            if x == 0:
-                result += lines[:places[x][0]] + userInp[x] + \
-                    lines[places[x][1]+1:places[x+1][0]]
-            elif x == len(places)-1:
-                result += userInp[x] + lines[places[x][1]+1:]
-            else:
-                result += userInp[x] + lines[places[x][1]+1:places[x+1][0]]
-    with open(a[0]+'_result.text', 'w+') as res:
-        res.write(result)
-    return result
+    parts = []
+    strippedText = strippedText = re.sub(r'\{.*?\}', '{}', text)
+    res = re.findall(r'\{.*?\}', text)
+    for i in res:
+        parts.append(i.strip("{ }"))
+    parts = tuple(parts)
+    return strippedText, parts
 
 
-if __name__ == '__main__':
-    print("\n                Welcome to 'Madlib' Game :)\n\n- Rules:\n Simply we will ask you to insert knids of words..\n & finally we will present a cool story about your input..\n\n\n Type 'y' if you Are you Ready?")
-    if input('>  ') == "y":
-        print(madlib())
-    else:
-        print('Sory to see you leaveing.. :(')
+def merge(text: str, parts: tuple):
+    mergedText = text.format(*parts)
+    return mergedText
 
 
-def parse_template():
-    pass
-
-
-def merge():
-    pass
-
-
-def write_new_file(filepath: str, content: str):
-    with open(filepath, 'w') as potato:
+def write_new_file(content: str):
+    with open('assets/dark_and_stormy_night_template_results.txt', 'w') as potato:
         potato.write(content)
+
+
+if __name__ == "__main__":
+    print("Welcome to Madlib Game")
+    print("Please enter some words to play the game!")
+    wordLst = []
+    text = read_template("assets/dark_and_stormy_night_template.txt")
+    strippedText, parts = parse_template(text)
+    print(text)
+    print(strippedText)
+    print(parts)
+    for i in range(0, len(parts)):
+        inp = input('add a word ')
+        wordLst.append(inp)
+    wordLst = tuple(wordLst)
+    mergedText = merge(strippedText, wordLst)
+    print(mergedText)
+    write_new_file(mergedText)
